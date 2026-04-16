@@ -1,0 +1,24 @@
+name: Run Crypto Bot
+
+on:
+  schedule:
+    - cron: '0 * * * *' # တစ်နာရီတစ်ခါ Auto Run ဖို့ ခိုင်းတာပါ
+  workflow_dispatch: # ကိုယ့်ဘာသာ Button နှိပ်ပြီး Run ချင်ရင်လည်း ရအောင်ပါ
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Python Script
+        run: python your_script_name.py  # သင့်ရဲ့ File နာမည် ပြောင်းရေးပါ
