@@ -9,7 +9,7 @@ from datetime import datetime
 from google import genai
 
 # ── CONFIG ────────────────────────────────────────────
-BOT_TOKEN  = os.environ.get('BOT_TOKEN')
+BOT_TOKEN  = os.environ.get('8745293910:AAHOvztDgGjIxTVRywY9j1-ENlflXr749Tg')
 GEMINI_KEY = os.environ.get('AQ.Ab8RN6LUCkqw1Hfbt8TMGNSVI8hqkN2EKVuGrqDHfeVqAZkZTw')
 CHANNEL_ID = "-1003896067498"
 SENT_FILE  = "sent_news.json"
