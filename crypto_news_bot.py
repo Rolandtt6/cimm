@@ -9,7 +9,7 @@ from datetime import datetime
 from google import genai
 
 # ── CONFIG ────────────────────────────────────────────
-# GitHub Secrets မှ Variable နာမည်များကိုသာ အသုံးပြုထားပါသည်
+# GitHub Secrets မှ Variable နာမည်များကိုသာ အသုံးပြုရပါမည်
 BOT_TOKEN  = os.environ.get('BOT_TOKEN')
 GEMINI_KEY = os.environ.get('GEMINI_API_KEY')
 CHANNEL_ID = "-1003896067498"
@@ -23,11 +23,44 @@ if GEMINI_KEY:
     except Exception as e:
         print(f"❌ AI Setup Error: {e}")
 
-# ... (ကျန်သော function များသည် မူလအတိုင်း မှန်ကန်ပါသည်) ...
+# ── FUNCTIONS ─────────────────────────────────────────
+
+def load_sent():
+    """ပို့ပြီးသား သတင်းများကို ဖိုင်ထဲမှ ပြန်ဖတ်ရန်"""
+    if os.path.exists(SENT_FILE):
+        try:
+            with open(SENT_FILE, "r") as f:
+                return set(json.load(f))
+        except: 
+            return set()
+    return set()
+
+def save_sent(sent):
+    """ပို့ပြီးသား သတင်းများကို ဖိုင်ထဲတွင် သိမ်းရန်"""
+    try:
+        with open(SENT_FILE, "w") as f:
+            json.dump(list(sent)[-500:], f)
+    except Exception as e:
+        print(f"❌ Save error: {e}")
+
+def get_ai_summary(title):
+    """Gemini AI ဖြင့် မြန်မာလို အနှစ်ချုပ်ခိုင်းခြင်း"""
+    if not client:
+        return None
+    try:
+        response = client.models.generate_content(
+            model="gemini-1.5-flash",
+            contents=f"Summarize this crypto news title in Burmese (professional and catchy for a news channel): {title}"
+        )
+        return response.text.strip()
+    except Exception as e:
+        print(f"❌ AI Processing Error: {e}")
+        return None
 
 def send_msg(text):
+    """Telegram သို့ စာသားပို့ရန်"""
     if not BOT_TOKEN:
-        print("❌ Error: BOT_TOKEN not found! Please check GitHub Secrets.")
+        print("❌ Error: BOT_TOKEN not found!")
         return False
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {"chat_id": CHANNEL_ID, "text": text, "parse_mode": "HTML"}
@@ -43,11 +76,10 @@ def send_msg(text):
         print(f"❌ Network Error: {e}")
         return False
 
-# ... (ကျန်သော code များသည် အဆင်ပြေပါသည်) ...
-
 def fetch_and_post():
+    """သတင်းများ စုဆောင်းပြီး AI နှင့် ပြုပြင်ကာ ပို့ပေးရန်"""
     print(f"[{datetime.now().strftime('%H:%M:%S')}] Fetching news...")
-    sent = load_sent()
+    sent = load_sent() # <--- အခု ဒီနေရာမှာ Error တက်တော့မှာ မဟုတ်ပါ
     
     rss_sources = [
         {"name": "CoinTelegraph", "url": "https://cointelegraph.com/rss", "emoji": "📰"},
@@ -87,6 +119,7 @@ def fetch_and_post():
     save_sent(sent)
     print(f"🏁 Done. {new_count} new articles posted.")
 
+# ── MAIN ──────────────────────────────────────────────
 def main():
     print("🚀 Bot Execution Started")
     fetch_and_post()
