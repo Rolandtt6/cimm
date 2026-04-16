@@ -20,9 +20,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          # google-generativeai library ပါဝင်စေရန် requirements.txt ကို စစ်ဆေးပါ
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Run Python Script
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}  # AI Key အတွက် ဒါကို ထည့်သွင်းထားပါတယ်
         run: python crypto_news_bot.py
