@@ -1,5 +1,8 @@
-name: Run Crypto Bot
 
+name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install python-telegram-bot requests beautifulsoup4
 on:
   schedule:
    - cron: '0 * * * *' # တစ်နာရီတစ်ခါ Auto Run ဖို့ ခိုင်းတာပါ
