@@ -2,7 +2,7 @@ name: Run Crypto Bot
 
 on:
   schedule:
-    - cron: '0 * * * *' # တစ်နာရီတစ်ခါ Auto Run ဖို့ ခိုင်းတာပါ
+   - cron: '0 * * * *' # တစ်နာရီတစ်ခါ Auto Run ဖို့ ခိုင်းတာပါ
   workflow_dispatch: # ကိုယ့်ဘာသာ Button နှိပ်ပြီး Run ချင်ရင်လည်း ရအောင်ပါ
 
 jobs:
@@ -21,4 +21,4 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run Python Script
-        run: python your_script_name.py  # သင့်ရဲ့ File နာမည် ပြောင်းရေးပါ
+        run: python crypto_news_bot.py  # သင့်ရဲ့ File နာမည် ပြောင်းရေးပါ
