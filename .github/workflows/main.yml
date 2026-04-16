@@ -2,8 +2,8 @@ name: Run Crypto Bot
 
 on:
   schedule:
-    - cron: '0 * * * *'  # တစ်နာရီတစ်ခါ Run ရန်
-  workflow_dispatch:      # ကိုယ့်ဘာသာ Button နှိပ်ပြီး စမ်းရန်
+    - cron: '0 * * * *'  # တစ်နာရီတစ်ခါ ပုံမှန် Run မည်
+  workflow_dispatch:      # ကိုယ့်ဘာသာ Button နှိပ်ပြီး စမ်းသပ်နိုင်ရန်
 
 jobs:
   build:
@@ -23,4 +23,6 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Run Python Script
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: python crypto_news_bot.py
