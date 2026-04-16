@@ -6,22 +6,22 @@ import time
 import json
 import hashlib
 from datetime import datetime
-from google import genai
+from openai import OpenAI  # OpenAI Library ကို အသုံးပြုခြင်း
 
 # ── CONFIG ────────────────────────────────────────────
-# GitHub Secrets မှ Variable နာမည်များကိုသာ အသုံးပြုရပါမည်
-BOT_TOKEN  = '8745293910:AAHOvztDgGjIxTVRywY9j1-ENlflXr749Tg' # os.environ မသုံးဘဲ တိုက်ရိုက်ထည့်ခြင်း
-GEMINI_KEY = 'AQ.Ab8RN6LUCkqw1Hfbt8TMGNSVI8hqkN2EKVuGrqDHfeVqAZkZTw'
-CHANNEL_ID = "-1003896067498"
-SENT_FILE  = "sent_news.json"
+# GitHub Secrets မှ Variable နာမည်များကိုသာ အသုံးပြုထားပါသည်
+BOT_TOKEN      = os.environ.get('BOT_TOKEN')
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY') 
+CHANNEL_ID     = "-1003896067498"
+SENT_FILE      = "sent_news.json"
 
-# Gemini AI Client Setup
+# OpenAI Client Setup
 client = None
-if GEMINI_KEY:
+if OPENAI_API_KEY:
     try:
-        client = genai.Client(api_key=GEMINI_KEY)
+        client = OpenAI(api_key=OPENAI_API_KEY)
     except Exception as e:
-        print(f"❌ AI Setup Error: {e}")
+        print(f"❌ OpenAI Setup Error: {e}")
 
 # ── FUNCTIONS ─────────────────────────────────────────
 
@@ -44,15 +44,19 @@ def save_sent(sent):
         print(f"❌ Save error: {e}")
 
 def get_ai_summary(title):
-    """Gemini AI ဖြင့် မြန်မာလို အနှစ်ချုပ်ခိုင်းခြင်း"""
+    """ChatGPT (GPT-4o-mini) ဖြင့် မြန်မာလို အနှစ်ချုပ်ခိုင်းခြင်း"""
     if not client:
         return None
     try:
-        response = client.models.generate_content(
-            model="gemini-1.5-flash",
-            contents=f"Summarize this crypto news title in Burmese (professional and catchy for a news channel): {title}"
+        response = client.chat.completions.create(
+            model="gpt-4o-mini", # စျေးသက်သာပြီး မြန်ဆန်သော model
+            messages=[
+                {"role": "system", "content": "You are a professional crypto journalist. Summarize the news title into a catchy, short Burmese sentence for a Telegram channel."},
+                {"role": "user", "content": f"Title: {title}"}
+            ],
+            max_tokens=150
         )
-        return response.text.strip()
+        return response.choices[0].message.content.strip()
     except Exception as e:
         print(f"❌ AI Processing Error: {e}")
         return None
@@ -79,7 +83,7 @@ def send_msg(text):
 def fetch_and_post():
     """သတင်းများ စုဆောင်းပြီး AI နှင့် ပြုပြင်ကာ ပို့ပေးရန်"""
     print(f"[{datetime.now().strftime('%H:%M:%S')}] Fetching news...")
-    sent = load_sent() # <--- အခု ဒီနေရာမှာ Error တက်တော့မှာ မဟုတ်ပါ
+    sent = load_sent()
     
     rss_sources = [
         {"name": "CoinTelegraph", "url": "https://cointelegraph.com/rss", "emoji": "📰"},
