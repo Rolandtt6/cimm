@@ -10,8 +10,8 @@ from google import genai
 
 # ── CONFIG ────────────────────────────────────────────
 # GitHub Secrets မှ Variable နာမည်များကိုသာ အသုံးပြုရပါမည်
-BOT_TOKEN  = os.environ.get('BOT_TOKEN')
-GEMINI_KEY = os.environ.get('GEMINI_API_KEY')
+BOT_TOKEN  = '8745293910:AAHOvztDgGjIxTVRywY9j1-ENlflXr749Tg' # os.environ မသုံးဘဲ တိုက်ရိုက်ထည့်ခြင်း
+GEMINI_KEY = 'AQ.Ab8RN6LUCkqw1Hfbt8TMGNSVI8hqkN2EKVuGrqDHfeVqAZkZTw'
 CHANNEL_ID = "-1003896067498"
 SENT_FILE  = "sent_news.json"
 
