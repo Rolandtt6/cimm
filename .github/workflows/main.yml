@@ -25,6 +25,7 @@ jobs:
 
       - name: Run Python Script
         env:
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          env:
+  BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: python crypto_news_bot.py
