@@ -1,27 +1,26 @@
+name: Run Crypto Bot
 
-name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install python-telegram-bot requests beautifulsoup4
 on:
   schedule:
-   - cron: '0 * * * *' # တစ်နာရီတစ်ခါ Auto Run ဖို့ ခိုင်းတာပါ
-  workflow_dispatch: # ကိုယ့်ဘာသာ Button နှိပ်ပြီး Run ချင်ရင်လည်း ရအောင်ပါ
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # v3 မှ v4 သို့ ပြောင်းပါ
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # v4 မှ v5 သို့ ပြောင်းပါ
         with:
-          python-version: '3.9'
+          python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Run Python Script
-        run: python crypto_news_bot.py  # သင့်ရဲ့ File နာမည် ပြောင်းရေးပါ
+        run: python crypto_news_bot.py # ဒီနေရာမှာ သင့်ဖိုင်နာမည် မှန်အောင် ပြန်စစ်ပါ
