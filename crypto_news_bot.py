@@ -10,7 +10,7 @@ from google import genai
 
 # ── CONFIG ────────────────────────────────────────────
 BOT_TOKEN  = os.environ.get('BOT_TOKEN')
-GEMINI_KEY = os.environ.get('GEMINI_API_KEY')
+GEMINI_KEY = os.environ.get('AQ.Ab8RN6LUCkqw1Hfbt8TMGNSVI8hqkN2EKVuGrqDHfeVqAZkZTw')
 CHANNEL_ID = "-1003896067498"
 SENT_FILE  = "sent_news.json"
 
